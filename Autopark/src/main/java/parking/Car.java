@@ -13,6 +13,7 @@ public class Car {
     public Car(Sensor sensorA, Sensor sensorB) {
         this.sensorA = sensorA;
         this.sensorB = sensorB;
+
     }
 
     // TC1: both sensors reliable -> average 5 readings from each
@@ -64,6 +65,7 @@ public class Car {
          *   TC2: position=0 (already at start) -> IllegalStateException, position unchanged
          */
     }
+    public State moveSideways(){return null;}
     public State WhereIs(){
         return new State(position, status, knownSpaces);
         /**
