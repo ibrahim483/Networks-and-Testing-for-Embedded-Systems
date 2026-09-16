@@ -20,7 +20,6 @@ public class CarTest {
 
     @Test
     void ifTheCarIsAtTheEndOfTheStreetCheckPositionAndChakingIfTheCarPositionIsIncreasing(){
-        
         car.moveForward();
         assertEquals(car.getState().getPosition(), 500);
     }

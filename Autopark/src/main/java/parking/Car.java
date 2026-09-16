@@ -54,8 +54,6 @@ public class Car {
                     }        
                 }
 
-
-
                 return ;
         }
     }
@@ -73,17 +71,40 @@ public class Car {
     }
 
 
-    public State moveForward(){
+        public State moveForward(){
 
         if(cState.getPosition() == 500){
             System.out.println("Limit Reached can't move forward");  
             return cState;
         } else {
             cState.setPosition(cState.getPosition() + 1);
-            
+
+            int distance = isEmpty();
+            if (distance >= 100 && distance <= 200) {
+                ParkingSpace parking1 =  new ParkingSpace(cState.getPosition(), true);
+                cState.addDetectedSpace(parking1);
+
+            }else{
+                ParkingSpace parking2 =  new ParkingSpace(cState.getPosition(), false);
+                cState.addDetectedSpace(parking2);
+            }
         }
         return cState;
         }
+
+        public State moveBackward(){
+
+            if(cState.getPosition() == 500){
+                System.out.println("The car can't move backwrad you are at the begining of the street");  
+                return cState;
+        } else {
+            cState.setPosition(cState.getPosition() + 1);
+        }
+            return cState;
+
+        }
+
+
     public  State getState(){
         return cState;
     }
