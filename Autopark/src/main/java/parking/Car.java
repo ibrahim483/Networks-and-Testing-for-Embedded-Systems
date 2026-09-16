@@ -41,7 +41,7 @@ public class Car {
                     }
                 else
                     {
-                        newState = MoveForward();
+                        newState = moveForward();
                         counter = cState.isCurrentTaken(i) ? 0 : counter + 1;
                         parkingFond = counter == 5;
                     }
@@ -73,11 +73,17 @@ public class Car {
     }
 
 
-    public State MoveForward()
-    {
-        
-        return  null;
-    }
+    public State moveForward(){
+
+        if(cState.getPosition() == 500){
+            System.out.println("Limit Reached can't move forward");  
+            return cState;
+        } else {
+            cState.setPosition(cState.getPosition() + 1);
+            
+        }
+        return cState;
+        }
     public  State getState(){
         return cState;
     }
