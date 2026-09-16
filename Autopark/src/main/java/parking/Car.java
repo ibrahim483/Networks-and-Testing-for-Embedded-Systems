@@ -18,6 +18,7 @@ public class Car {
 
     // TC1: both sensors reliable -> average 5 readings from each
     public int isEmpty() {
+        System.out.println("isEmpty");
       return 0;
         }
 
