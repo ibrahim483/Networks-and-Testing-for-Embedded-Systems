@@ -24,4 +24,5 @@ public class ParkingSpace {
 
         return p.taken == this.taken && p.position == this.position;
     }
+
 }
