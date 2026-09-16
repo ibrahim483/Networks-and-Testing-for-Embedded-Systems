@@ -47,6 +47,47 @@ public class State {
         this.detectedSpaces = detectedSpace;
     }
 
+    public void addDetectedSpace(ParkingSpace space) {
+        detectedSpaces.add(space);
+    }
+
+    public void clearDetectedSpaces() {
+        detectedSpaces.clear();
+    }
+
+    public void removeDetectedSpace(ParkingSpace space) {
+        detectedSpaces.remove(space);
+    }
+
+    public void updateDetectedSpace(int index, ParkingSpace space) {
+        detectedSpaces.set(index, space);
+    }
+
+    public boolean isDetectedSpacesFull() {
+        return detectedSpaces.size() >= 500;
+    }
+
+    public boolean isDetectedSpacesEmpty() {
+        return detectedSpaces.isEmpty();
+    }
+
+    public int validParkingSpace(int index) {
+        
+        int count = 0;
+        for(int i = index ; i > index - 5 ; i--)
+        {
+            if (i >= 0 && !detectedSpaces.get(i).isTaken())
+            {
+                count++;
+            }
+            else
+            {
+                return count;
+            }
+        }
+        return count;
+    }
+
 
     @Override
     public boolean equals(Object o) {
