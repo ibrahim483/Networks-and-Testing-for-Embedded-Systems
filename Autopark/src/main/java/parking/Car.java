@@ -1,7 +1,7 @@
 package parking;
 
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class Car {
     private State cState ;
@@ -81,4 +81,30 @@ public class Car {
     public  State getState(){
         return cState;
     }
+    public int isEmpty(){
+        int sumA = 0;
+        int sumB = 0;
+        boolean aReliable = true;
+        boolean bReliable = true;
+        for (int i = 0; i < 5; i++) {
+          int valA = sensorA.getDistance();
+          int valB = sensorB.getDistance();
+
+          if (valA < 0 || valA > 100) aReliable = false;
+          if (valB < 0 || valB > 100) bReliable = false;
+
+          sumA += valA;
+          sumB += valB;
+        }
+        if(aReliable && bReliable) {
+        return (sumA + sumB )/ 10;
+    } else if (aReliable) {
+        return sumA / 5;
+    } else if (bReliable) {
+        return sumB / 5;
+    } else {
+        return -1; // Both sensors are unreliable
+    }
+    }
+
 }
