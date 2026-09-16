@@ -67,7 +67,7 @@ public class Car {
          */
     }
     public State moveSideways(){return null;}
-    public State WhereIs(){
+    public State whereIs(){
         return new State(position, status, knownSpaces);
         /**
          * Returns the current position of the car on the street and its
