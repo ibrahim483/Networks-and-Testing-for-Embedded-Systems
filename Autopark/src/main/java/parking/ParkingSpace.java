@@ -1,10 +1,27 @@
 package parking;
 
 public class ParkingSpace {
-    public final int startMeter;
-    public final int endMeter;
-public ParkingSpace(int startMeter, int endMeter) {
-    this.startMeter = startMeter;
-    this.endMeter = endMeter;
-}
+      
+    
+    private final int position;
+    private final boolean taken;
+    
+    
+        public ParkingSpace(int position, boolean status) {
+        this.position = position;
+        this.taken = status;
+    }
+
+
+    public boolean isTaken()
+    {
+        return taken;
+    }
+
+    @Override 
+    public boolean equals(Object o){
+        ParkingSpace p = (ParkingSpace) o ;
+
+        return p.taken == this.taken && p.position == this.position;
+    }
 }

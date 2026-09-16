@@ -1,3 +1,3 @@
 package parking;
 
-public enum CarStatus { PARKED, UNPARKED }
+public  enum CarStatus { PARKED, UNPARKED, NOPARKING}
