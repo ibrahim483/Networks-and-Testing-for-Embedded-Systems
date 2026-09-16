@@ -38,6 +38,15 @@ public class State {
     {
         return detectedSpaces.get(i).isTaken();
     }
+    
+    public void setPosition(int position) {
+        currentPosition = position;
+    }
+    
+    public void setDetectedSpace(List<ParkingSpace> detectedSpace) {
+        this.detectedSpaces = detectedSpace;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -49,11 +58,4 @@ public class State {
             && this.detectedSpaces.equals(s.detectedSpaces);
     }
 
-    public void setPosition(int position) {
-        currentPosition = position;
-    }
-
-    public void setDetectedSpace(List<ParkingSpace> detectedSpace) {
-        this.detectedSpaces = detectedSpace;
-    }
 }

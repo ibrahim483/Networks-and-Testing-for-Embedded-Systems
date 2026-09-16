@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Car {
     private State cState ;
-    private boolean parkingFond;
+    private boolean parkingFond = false;
     private final Sensor sensorA;
     private final Sensor sensorB;
 
@@ -18,30 +18,41 @@ public class Car {
 
     public void park(){
 
-        State tempState = new State(0, CarStatus.UNPARKED, new ArrayList<>());
         int counter = 0;
+        State newState = new State(counter, null, null);
         if (cState.getParkStatus() == CarStatus.PARKED){
             System.out.println("Car is Already Parked...");
         }
-        for (int i = 0; i <= 500; i++) {
+        else
+        {
+            for (int i = 0; i <= 500; i++) {
+                
+                if (cState.getPosition() == 500 && parkingFond == false)
+                    {
+                        cState.setParkingStatus(CarStatus.NOPARKING);
+                        parkingFond = false;
+                        cState.setPosition(newState.getPosition());
+                        cState.setDetectedSpace(newState.getDetectedSpace());
+                        return ;
+                    }
+                else
+                    {
+                        newState = MoveForward();
+                        counter = cState.isCurrentTaken(i) ? 0 : counter + 1;
+                        parkingFond = counter == 5;
+                    }
+                    if (parkingFond) {
+                        System.out.println("parking maneuver..");
+                        cState.setParkingStatus(CarStatus.PARKED);
+                        cState.setPosition(newState.getPosition());
+                        cState.setDetectedSpace(newState.getDetectedSpace());
+                        return ;
+                    }        
+                }
 
-            if (tempState.getPosition() == 500 && parkingFond == false)
-            {
-                tempState.setParkingStatus(CarStatus.NOPARKING);
-                parkingFond = false;
-            }
-            else
-            {
-                tempState = MoveForward();
-                counter = tempState.isCurrentTaken(i) ? counter + 1 : 0;
-                parkingFond = counter == 5;
-            }
-            if (parkingFond) {
-                System.out.println("parking maneuver..");
-                cState.setParkingStatus(CarStatus.PARKED);
-                cState.setPosition(tempState.getPosition());
-                cState.setDetectedSpace(tempState.getDetectedSpace());
-            }        
+
+
+                return ;
         }
     }
 
@@ -49,7 +60,7 @@ public class Car {
     public State MoveForward()
     {
 
-        return  null;
+        return  new State(100, CarStatus.PARKED, new ArrayList<>());
     }
     public  State getState(){
         return cState;

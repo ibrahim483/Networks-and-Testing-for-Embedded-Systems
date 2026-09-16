@@ -63,10 +63,11 @@ class ParkTest {
         c.park();
 
         assertEquals(c.getState().getParkStatus(), CarStatus.PARKED);
+        System.out.println(c.getState().getPosition() + " " + c.getState().getDetectedSpace() + " " + c.getState().getParkStatus());
     }
 
     @Test void NoParkingYetMoveTest(){
-
+        
 
 
     }
