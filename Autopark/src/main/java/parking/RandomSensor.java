@@ -1,5 +1,4 @@
 package parking;
-
 public class RandomSensor implements Sensor{
     @Override
     public int getDistance() {
