@@ -90,8 +90,8 @@ public class Car {
           int valA = sensorA.getDistance();
           int valB = sensorB.getDistance();
 
-          if (valA < 0 || valA > 100) aReliable = false;
-          if (valB < 0 || valB > 100) bReliable = false;
+          if (valA < 0 || valA > 200) aReliable = false;
+          if (valB < 0 || valB > 200) bReliable = false;
 
           sumA += valA;
           sumB += valB;
