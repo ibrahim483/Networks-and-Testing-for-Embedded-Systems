@@ -3,7 +3,7 @@ package parking;
 import org.junit.jupiter.api.Test;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +64,30 @@ class ParkTest {
 
         assertEquals(c.getState().getParkStatus(), CarStatus.PARKED);
         System.out.println(c.getState().getPosition() + " " + c.getState().getDetectedSpace() + " " + c.getState().getParkStatus());
+    }
+
+    @Test 
+    public void parkOnAvailableParkingSpaceOnEntry()
+    {
+        List l = new ArrayList<ParkingSpace>();
+        ParkingSpace space;
+        for (int i = 0; i <= 500; i++) {
+            if (i <= 5 && i >= 0) {
+                 space = new ParkingSpace(i, true);
+            }
+            else
+            {
+                 space = new ParkingSpace(i, false);
+            }
+            l.add(space);
+        }
+
+        State s = new State(5, CarStatus.UNPARKED, l );
+        Car   c = new Car(null, null, s);
+
+        c.park();
+
+        assertEquals(c.getState().getParkStatus(), CarStatus.PARKED);
     }
 
     @Test void NoParkingYetMoveTest(){

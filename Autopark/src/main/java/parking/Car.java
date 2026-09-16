@@ -23,7 +23,7 @@ public class Car {
     public void park(){
 
         int counter = 0;
-        State newState = new State(counter, null, null);
+        State newState = new State(this.cState.getPosition(), this.cState.getParkStatus(), this.cState.getDetectedSpace());
         if (cState.getParkStatus() == CarStatus.PARKED){
             System.out.println("Car is Already Parked...");
         }
@@ -61,16 +61,24 @@ public class Car {
     }
 
 
+    public void unPark(){
+        if (cState.getParkStatus() == CarStatus.PARKED){
+            cState.setParkingStatus(CarStatus.UNPARKED);
+            System.out.println("Car is UnParked...");
+        }
+        else
+        {
+            System.out.println("Car is Not Parked...");
+        }
+    }
+
+
     public State MoveForward()
     {
-
-        return  new State(100, CarStatus.PARKED, new ArrayList<>());
+        
+        return  null;
     }
     public  State getState(){
         return cState;
-    }
-
-    public State moveForward() {
-        return MoveForward();
     }
 }
