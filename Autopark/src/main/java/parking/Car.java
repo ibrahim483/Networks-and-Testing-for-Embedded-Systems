@@ -15,6 +15,10 @@ public class Car {
         this.cState  = cState;
     }
 
+    public Car(Sensor sensorA, Sensor sensorB) {
+        this(sensorA, sensorB, new State(0, CarStatus.UNPARKED, new ArrayList<>()));
+    }
+
 
     public void park(){
 
@@ -64,5 +68,9 @@ public class Car {
     }
     public  State getState(){
         return cState;
+    }
+
+    public State moveForward() {
+        return MoveForward();
     }
 }
