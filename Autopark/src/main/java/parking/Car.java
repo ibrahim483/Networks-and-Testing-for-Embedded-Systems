@@ -8,6 +8,7 @@ public class Car {
     private boolean parkingFond = false;
     private final Sensor sensorA;
     private final Sensor sensorB;
+    private final int lengthOfStreet = 500;
 
     public Car(Sensor sensorA, Sensor sensorB, State cState) {
         this.sensorA = sensorA;
@@ -71,9 +72,9 @@ public class Car {
     }
 
 
-        public State moveForward(){
+    public State moveForward(){
 
-        if(cState.getPosition() == 500){
+        if(cState.getPosition() > lengthOfStreet){
             System.out.println("Limit Reached can't move forward");  
             return cState;
         } else {
@@ -92,13 +93,14 @@ public class Car {
         return cState;
         }
 
-        public State moveBackward(){
+    public State moveBackward(){
 
-            if(cState.getPosition() == 500){
-                System.out.println("The car can't move backwrad you are at the begining of the street");  
+            if(cState.getPosition() == 0){
+                System.out.println("The car can't move backward you are at the beginning of the street");  
                 return cState;
         } else {
-            cState.setPosition(cState.getPosition() + 1);
+            cState.setPosition(cState.getPosition() - 1);
+
         }
             return cState;
 

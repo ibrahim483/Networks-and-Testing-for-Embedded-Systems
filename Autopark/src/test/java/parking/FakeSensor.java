@@ -10,7 +10,7 @@ public class FakeSensor implements Sensor {
         for (int v : values) readings.add(v);
     }
 
-
+    @Override 
     public int getDistance() {
         return readings.isEmpty() ? 0 : readings.poll();
     }
