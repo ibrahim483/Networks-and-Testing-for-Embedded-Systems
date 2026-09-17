@@ -7,8 +7,8 @@ public class Car {
     private State cState ;
     private boolean parkingFond = false;
     private final int lengthOfStreet = 500;
-    private final Sensor sensorA;
-    private final Sensor sensorB;
+    private  Sensor sensorA;
+    private  Sensor sensorB;
 
     public Car(Sensor sensorA, Sensor sensorB, State cState) {
         this.sensorA = sensorA;
