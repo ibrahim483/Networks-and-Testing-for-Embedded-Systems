@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class Car {
     private State cState ;
     private boolean parkingFond = false;
-    private final Sensor sensorA;
-    private final Sensor sensorB;
+    private  Sensor sensorA;
+    private  Sensor sensorB;
 
     public Car(Sensor sensorA, Sensor sensorB, State cState) {
         this.sensorA = sensorA;
@@ -23,9 +23,18 @@ public class Car {
     public void park(){
 
         int counter = 0;
-        State newState = new State(this.cState.getPosition(), this.cState.getParkStatus(), this.cState.getDetectedSpace());
-        if (cState.getParkStatus() == CarStatus.PARKED){
+        int carPosition = cState.getPosition();
+        CarStatus status = cState.getParkStatus();
+        ArrayList<ParkingSpace> parkings= cState.getDetectedSpace();
+        State newState = new State(carPosition, status, parkings);
+        if (status == CarStatus.PARKED){
             System.out.println("Car is Already Parked...");
+        }
+        else if (cState.validParkingSpace(carPosition) == 5) {
+            System.out.println("Parking maneuver...");
+            cState.setDetectedSpace(parkings);
+            cState.setParkingStatus(CarStatus.PARKED);
+            cState.setPosition(carPosition);
         }
         else
         {
@@ -81,11 +90,11 @@ public class Car {
 
             int distance = isEmpty();
             if (distance >= 100 && distance <= 200) {
-                ParkingSpace parking1 =  new ParkingSpace(cState.getPosition(), true);
+                ParkingSpace parking1 =  new ParkingSpace(cState.getPosition(), false);
                 cState.addDetectedSpace(parking1);
 
             }else{
-                ParkingSpace parking2 =  new ParkingSpace(cState.getPosition(), false);
+                ParkingSpace parking2 =  new ParkingSpace(cState.getPosition(), true);
                 cState.addDetectedSpace(parking2);
             }
         }
@@ -109,28 +118,50 @@ public class Car {
         return cState;
     }
     public int isEmpty(){
+
         int sumA = 0;
         int sumB = 0;
         boolean aReliable = true;
         boolean bReliable = true;
-        for (int i = 0; i < 5; i++) {
-          int valA = sensorA.getDistance();
-          int valB = sensorB.getDistance();
-
-          if (valA < 0 || valA > 200) aReliable = false;
-          if (valB < 0 || valB > 200) bReliable = false;
-
-          sumA += valA;
-          sumB += valB;
+        int[] valA = sensorA.getDistance();
+        int[] valB = sensorB.getDistance();
+        
+        for (int i = 0 ; i < valA.length ; i++) {
+            sumB += valB[i];
+            sumA += valA[i]; 
         }
+
+        sumB = sumB/valB.length;
+        sumA = sumA/valA.length;
+
+        int tempA = valA[0];
+        int tempB = valB[0];
+        for (int i = 0 ; i < valA.length ; i++) {
+            if (tempA - sumA >= valA[i] - sumA && tempA - sumA != 0) {
+                tempA = valA[i];
+                System.out.println(tempA);
+            }
+            if (tempB - sumB >= valB[i] - sumB && tempB - sumB != 0) {
+                tempB = valB[i];
+            }
+        }
+
+        if (tempA < 0 || tempA > 200) {
+            aReliable = false;
+        }
+        if (tempB < 0 || tempB > 200) {
+            bReliable = false;
+        }
+
+
         if(aReliable && bReliable) {
-        return (sumA + sumB )/ 10;
+        return (tempA + tempB )/ 2;
     } else if (aReliable) {
-        return sumA / 5;
+        return tempA;
     } else if (bReliable) {
-        return sumB / 5;
+        return tempB;
     } else {
-        return -1; // Both sensors are unreliable
+        return 0; // Both sensors are unreliable
     }
     }
 
