@@ -133,5 +133,8 @@ public class Car {
         return -1; // Both sensors are unreliable
     }
     }
-
+public State whereIs(){
+    return this.cState;
 }
+}
+
