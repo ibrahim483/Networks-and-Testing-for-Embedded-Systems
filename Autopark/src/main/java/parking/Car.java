@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Car {
     private State cState ;
     private boolean parkingFond = false;
+    private final int lengthOfStreet = 500;
     private final Sensor sensorA;
     private final Sensor sensorB;
 
