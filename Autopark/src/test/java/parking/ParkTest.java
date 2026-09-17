@@ -29,9 +29,9 @@ class ParkTest {
     @Test 
     public void endOfStreetNoParkingFound () {
 
-        List l = new ArrayList<ParkingSpace>();
+        ArrayList l = new ArrayList<ParkingSpace>();
         for (int i = 0; i <= 500; i++) {
-            ParkingSpace space = new ParkingSpace(i, false);
+            ParkingSpace space = new ParkingSpace(i, true);
             l.add(space);
         }
         State s = new State(500, CarStatus.UNPARKED, l );
@@ -45,7 +45,7 @@ class ParkTest {
 
     @Test 
     public void parkWhenAParkingIsAvailable(){
-        List l = new ArrayList<ParkingSpace>();
+        ArrayList l = new ArrayList<ParkingSpace>();
         ParkingSpace space;
         for (int i = 0; i <= 500; i++) {
             if (i <= 100 && i >= 95) {
@@ -58,7 +58,7 @@ class ParkTest {
             l.add(space);
         }
         State s = new State(0, CarStatus.UNPARKED, l );
-        Car   c = new Car(null, null, s);
+        Car   c = new Car(new FakeSensor(null), null, s);
 
         c.park();
 
@@ -69,15 +69,15 @@ class ParkTest {
     @Test 
     public void parkOnAvailableParkingSpaceOnEntry()
     {
-        List l = new ArrayList<ParkingSpace>();
+        ArrayList l = new ArrayList<ParkingSpace>();
         ParkingSpace space;
         for (int i = 0; i <= 500; i++) {
             if (i <= 5 && i >= 0) {
-                 space = new ParkingSpace(i, true);
+                 space = new ParkingSpace(i, false);
             }
             else
             {
-                 space = new ParkingSpace(i, false);
+                 space = new ParkingSpace(i, true);
             }
             l.add(space);
         }

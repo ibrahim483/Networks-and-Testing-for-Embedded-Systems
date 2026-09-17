@@ -1,15 +1,14 @@
 package parking;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class State {
     private  int currentPosition = 0;
     private  CarStatus status = CarStatus.UNPARKED;
-    private  List<ParkingSpace> detectedSpaces;
+    private  ArrayList<ParkingSpace> detectedSpaces;
 
 
-    public State(int currentPosition, CarStatus status, List<ParkingSpace> detectedSpaces) {
+    public State(int currentPosition, CarStatus status, ArrayList<ParkingSpace> detectedSpaces) {
         this.currentPosition = currentPosition;
         this.status = status;
         this.detectedSpaces = detectedSpaces;
@@ -25,7 +24,7 @@ public class State {
     }
     
     
-    public List<ParkingSpace> getDetectedSpace(){
+    public ArrayList<ParkingSpace> getDetectedSpace(){
         return detectedSpaces;
     }
 
@@ -43,7 +42,7 @@ public class State {
         currentPosition = position;
     }
     
-    public void setDetectedSpace(List<ParkingSpace> detectedSpace) {
+    public void setDetectedSpace(ArrayList<ParkingSpace> detectedSpace) {
         this.detectedSpaces = detectedSpace;
     }
 

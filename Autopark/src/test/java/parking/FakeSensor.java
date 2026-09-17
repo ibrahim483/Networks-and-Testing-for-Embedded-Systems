@@ -1,17 +1,17 @@
 package parking;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class FakeSensor implements Sensor {
-    private final Queue<Integer> readings = new LinkedList<>();
+    
+    private int[] readings = new int[5]; 
 
     public FakeSensor(int... values) {
-        for (int v : values) readings.add(v);
+        for(int v = 0 ; v < readings.length; v++) {
+            readings[v] = values[v];
     }
+}
 
-    @Override 
-    public int getDistance() {
-        return readings.isEmpty() ? 0 : readings.poll();
+
+    public int[] getDistance() {
+        return readings;
     }
 }
