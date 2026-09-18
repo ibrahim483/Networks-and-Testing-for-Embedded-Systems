@@ -73,6 +73,9 @@ public class State {
     public int validParkingSpace(int index) {
         
         int count = 0;
+        if (detectedSpaces.isEmpty()) {
+            return 0;
+        }
         for(int i = index ; i > index - 5 ; i--)
         {
             if (i >= 0 && !detectedSpaces.get(i).isTaken())

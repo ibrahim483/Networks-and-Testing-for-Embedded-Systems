@@ -16,6 +16,7 @@ class ParkTest {
     @Test
     public void AlreadyParkedTest (){
 
+        
         State s = new State(10, CarStatus.PARKED, new ArrayList<ParkingSpace>() );
         State sCopy = new State(s.getPosition(), s.getParkStatus(), s.getDetectedSpace());
         Car   c = new Car(null, null, s);
@@ -47,18 +48,11 @@ class ParkTest {
     public void parkWhenAParkingIsAvailable(){
         ArrayList l = new ArrayList<ParkingSpace>();
         ParkingSpace space;
-        for (int i = 0; i <= 500; i++) {
-            if (i <= 100 && i >= 95) {
-                 space = new ParkingSpace(i, true);
-            }
-            else
-            {
-                 space = new ParkingSpace(i, false);
-            }
-            l.add(space);
-        }
+        FakeSensor a = new FakeSensor();
+        FakeSensor b = new FakeSensor();
+
         State s = new State(0, CarStatus.UNPARKED, l );
-        Car   c = new Car(new FakeSensor(null), null, s);
+        Car   c = new Car(a, b, s);
 
         c.park();
 

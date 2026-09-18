@@ -23,15 +23,17 @@ public class Car {
 
     public void park(){
 
-        int counter = 0;
         int carPosition = cState.getPosition();
         CarStatus status = cState.getParkStatus();
-        ArrayList<ParkingSpace> parkings= cState.getDetectedSpace();
+        int counter = cState.validParkingSpace(carPosition);
+        ArrayList<ParkingSpace> parkings= cState.getDetectedSpace();        
         State newState = new State(carPosition, status, parkings);
+
+
         if (status == CarStatus.PARKED){
             System.out.println("Car is Already Parked...");
         }
-        else if (cState.validParkingSpace(carPosition) == 5) {
+        else if (counter == 5) {
             System.out.println("Parking maneuver...");
             cState.setDetectedSpace(parkings);
             cState.setParkingStatus(CarStatus.PARKED);
@@ -39,12 +41,10 @@ public class Car {
         }
         else
         {
-            for (int i = 0; i <= 500; i++) {
-                
-                if (cState.getPosition() == 500 && parkingFond == false)
+            for (int i = 0; i <= 500 - carPosition; i++) {
+                if (carPosition == 500 && parkingFond == false)
                     {
                         cState.setParkingStatus(CarStatus.NOPARKING);
-                        parkingFond = false;
                         cState.setPosition(newState.getPosition());
                         cState.setDetectedSpace(newState.getDetectedSpace());
                         return ;
@@ -55,13 +55,13 @@ public class Car {
                         counter = cState.isCurrentTaken(i) ? 0 : counter + 1;
                         parkingFond = counter == 5;
                     }
-                    if (parkingFond) {
-                        System.out.println("parking maneuver..");
-                        cState.setParkingStatus(CarStatus.PARKED);
-                        cState.setPosition(newState.getPosition());
-                        cState.setDetectedSpace(newState.getDetectedSpace());
-                        return ;
-                    }        
+                if (parkingFond) {
+                    System.out.println("parking maneuver..");
+                    cState.setParkingStatus(CarStatus.PARKED);
+                    cState.setPosition(newState.getPosition());
+                    cState.setDetectedSpace(newState.getDetectedSpace());
+                    return ;
+                }        
                 }
 
                 return ;
