@@ -12,3 +12,4 @@ blueocean
 matrix-auth
 build-timeout
 antisamy-markup-formatter
+email-ext

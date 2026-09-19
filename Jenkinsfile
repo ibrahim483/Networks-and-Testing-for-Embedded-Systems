@@ -20,6 +20,7 @@ pipeline {
     environment {
         PROJECT_DIR = 'Autopark'
         MAVEN_OPTS  = '-Dmaven.repo.local=.m2repo'
+        MAIL_TO     = 'ibrahim.abbalta@gmail.com'
     }
 
     stages {
@@ -80,9 +81,44 @@ pipeline {
     }
 
     post {
+
+        // Mejl när bygget går sönder - med namnen på de fallerande testerna
+        failure {
+            emailext(
+                to: env.MAIL_TO,
+                subject: '[Jenkins] MISSLYCKADES: $PROJECT_NAME #$BUILD_NUMBER',
+                body: '''Bygget misslyckades.
+
+Projekt:  $PROJECT_NAME
+Bygge:    #$BUILD_NUMBER
+Commit:   $GIT_REVISION - $GIT_BRANCH
+
+Fallerande tester:
+$FAILED_TESTS
+
+Hela loggen: $BUILD_URL/console
+'''
+            )
+        }
+
+        // Mejl när det blir grönt igen efter ett rött bygge
+        fixed {
+            emailext(
+                to: env.MAIL_TO,
+                subject: '[Jenkins] LAGAT: $PROJECT_NAME #$BUILD_NUMBER',
+                body: '''Bygget är grönt igen - alla tester går igenom.
+
+Projekt:  $PROJECT_NAME
+Bygge:    #$BUILD_NUMBER
+Commit:   $GIT_REVISION - $GIT_BRANCH
+
+Detaljer: $BUILD_URL
+'''
+            )
+        }
+
         success  { echo "✅ Bygget lyckades - #${env.BUILD_NUMBER}" }
         unstable { echo "⚠️  Bygget gick igenom men tester failade - #${env.BUILD_NUMBER}" }
-        failure  { echo "❌ Bygget misslyckades - #${env.BUILD_NUMBER}" }
         always   { cleanWs(notFailBuild: true) }
     }
 }
