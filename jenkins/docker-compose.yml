@@ -1,0 +1,16 @@
+services:
+  jenkins:
+    build: .
+    image: jenkins-autopark:lts
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "8080:8080"     # webbgränssnittet -> http://localhost:8080
+      - "50000:50000"   # för ev. build-agenter
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=true -Duser.timezone=Europe/Stockholm"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+volumes:
+  jenkins_home:

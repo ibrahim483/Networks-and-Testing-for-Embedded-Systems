@@ -1,0 +1,12 @@
+# Byggresultat (ska aldrig ligga i git - Jenkins bygger dem åt oss)
+target/
+*.class
+.m2repo/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Övrigt
+*.log
