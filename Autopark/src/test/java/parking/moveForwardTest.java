@@ -14,11 +14,13 @@ public class moveForwardTest {
     Car car = new Car(a,b,new State(0, CarStatus.UNPARKED, new ArrayList<ParkingSpace>()));
 
 
-    
-    /*
-    Those are the testings that targets the function "MoveForward".
-    */
 
+    /**
+     Description: Calls moveForward once and checks that the car position is increased by one meter.
+     Pre-condition: The car is at position 0, UNPARKED, with an empty detected-spaces list.
+     Post-condition: The car position is 1.
+     Test-cases: moveForward() called once -> getPosition() == 1
+    */
     @Test
     void ifTheCarIsAtTheEndOfTheStreetCheckPositionAndChakingIfTheCarPositionIsIncreasing(){
         car.moveForward();
@@ -26,6 +28,13 @@ public class moveForwardTest {
     }
 
 
+    /**
+     Description: Moves the car forward twice and checks that the space at index 0 of the detected
+                  spaces is not recorded as taken.
+     Pre-condition: The car is at position 0, UNPARKED, with an empty detected-spaces list.
+     Post-condition: Two ParkingSpace entries were added and isCurrentTaken(0) is false.
+     Test-cases: moveForward() called twice -> isCurrentTaken(0) == false
+    */
     @Test
     void checkTheNextPlaceShouldBeEmpty(){
         car.moveForward();
@@ -34,7 +43,14 @@ public class moveForwardTest {
 
     }
 
-        @Test
+    /**
+     Description: Moves the car forward 501 times (until the end of the street) and checks that the
+                  space at index 500 is not recorded as taken.
+     Pre-condition: The car is at position 0, UNPARKED, with an empty detected-spaces list.
+     Post-condition: isCurrentTaken(500) is false.
+     Test-cases: moveForward() called 501 times (i = 0..500) -> isCurrentTaken(500) == false
+    */
+    @Test
     void checkAllThePlaceShouldBeEmpty(){
         for(int i = 0; i <= 500; i++){
             car.moveForward();
@@ -43,7 +59,14 @@ public class moveForwardTest {
 
     }
 
-            @Test
+    /**
+     Description: Moves the car forward 500 times and checks that the space at index 499 is not
+                  recorded as taken.
+     Pre-condition: The car is at position 0, UNPARKED, with an empty detected-spaces list.
+     Post-condition: isCurrentTaken(499) is false.
+     Test-cases: moveForward() called 500 times (i = 0..499) -> isCurrentTaken(499) == false
+    */
+    @Test
     void checkAllThePlaceShouldAvalibel(){
         for(int i = 0; i < 500; i++){
             car.moveForward();
@@ -53,28 +76,5 @@ public class moveForwardTest {
     }
 
 
-    @Test 
-    void ifTheCarIsAtTheendOfTheStreetDontMoveSendSignalLimitReached(){
 
-    }
-
-    @Test 
-    void ifTheCarIsNotEndOfTheStreetAndNoEmptySpotAndNotParkedThenMoveForwardOneMeterAndClearWorkList(){
-
-    }
-
-    @Test 
-    void ifTheCarIsNotEndOfTheStreetAndNotParkedAndTheListIsNotFUllButThereIsAnEmptySpotThenMoveForwardOneMeterAndAddPositionToTheList(){
-
-    }
-
-    @Test 
-    void ifTheCarIsNotParkedOrEndOfTheStreetButThereIsAnEmptySotAndWorkListIsFullThanMoveForwardOneMeterAndAddPositionToWorkListAndClearWorkListThenSaveSpotToResultList(){
-
-    }
-
-    //__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-    
 }
