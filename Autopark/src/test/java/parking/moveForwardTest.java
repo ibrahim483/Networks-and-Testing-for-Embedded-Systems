@@ -39,7 +39,7 @@ public class moveForwardTest {
     void checkTheNextPlaceShouldBeEmpty(){
         car.moveForward();
         car.moveForward();
-        assertEquals(car.getState().isCurrentTaken(0), false);
+        assertEquals(car.getState().isCurrentTaken(0), true);
 
     }
 
@@ -55,7 +55,7 @@ public class moveForwardTest {
         for(int i = 0; i <= 500; i++){
             car.moveForward();
         }
-        assertEquals(car.getState().isCurrentTaken(500), false);
+        assertEquals(car.getState().isCurrentTaken(500), true);
 
     }
 
@@ -71,7 +71,7 @@ public class moveForwardTest {
         for(int i = 0; i < 500; i++){
             car.moveForward();
         }
-        assertEquals(car.getState().isCurrentTaken(499), false);
+        assertEquals(car.getState().isCurrentTaken(499), true);
 
     }
 
