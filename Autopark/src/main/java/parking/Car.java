@@ -82,10 +82,20 @@ public class Car {
         }
     }
 
-
-    /** 
-     * @return State
-     */
+    /**
+     Description: Moves the car forward by one meter. After moving, the sensors are read (isEmpty())
+                  and the new position is recorded in the detected spaces list: as taken (true) unless
+                  the measured distance is between 100 and 200, in which case it is recorded as free (false).
+     Pre-condition: The car position is not beyond the end of the street (position <= lengthOfStreet).
+     Post-condition: If the limit was reached, the state is unchanged and "Limit Reached can't move forward"
+                     is printed. Otherwise the position is increased by 1 and exactly one ParkingSpace
+                     for the new position is added to the detected spaces. The current State is returned.
+     Test-cases: moveForwardTest
+                 - the position increases by 1 after one call
+                 - the detected space of the next position is recorded as not taken
+                 - the position is recorded correctly after 500 moves (end of the street)
+                 - at the end of the street the car does not move and "Limit Reached" is signalled
+    */
     public State moveForward(){
 
         if(cState.getPosition() >= lengthOfStreet){
@@ -109,9 +119,15 @@ public class Car {
         return cState;
         }
 
-    /** 
-     * @return State
-     */
+    /**
+     Description: Moves the car backward by one meter. No sensor reading or space detection is done.
+     Pre-condition: The car position is greater than 0 (not at the beginning of the street).
+     Post-condition: If the position is 0, the state is unchanged and a message is printed that the car
+                     can't move backward. Otherwise the position is decreased by 1. The current State
+                     is returned.
+     Test-cases: moveBackwardTest
+                 - at the beginning of the street (position 0) the car stays at position 0
+    */
     public State moveBackward(){
 
             if(cState.getPosition() == 0){

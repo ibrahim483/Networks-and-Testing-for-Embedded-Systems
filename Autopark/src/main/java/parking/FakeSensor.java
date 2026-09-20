@@ -1,3 +1,4 @@
+
 package parking;
 
 import java.util.Random;
@@ -40,6 +41,5 @@ public class FakeSensor implements Sensor {
         }
         return readings;
     } 
-
-    
 }
+    

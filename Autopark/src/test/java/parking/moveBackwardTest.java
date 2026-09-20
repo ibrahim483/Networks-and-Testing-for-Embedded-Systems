@@ -15,8 +15,14 @@ public class moveBackwardTest {
     Car car = new Car(a,b,new State(0, CarStatus.UNPARKED, new ArrayList<ParkingSpace>()));
 
     
-    /*
-    Those are the testings that targets the function "MoveBackward".
+    /**
+     Description: Tests that target the function "moveBackward" of Car.
+     Pre-condition: A car at position 0 (beginning of the street), UNPARKED, with an empty
+                    detected-spaces list, and fake sensors reporting distances of about 30.
+     Post-condition: After each test the car position matches the expected behaviour of moveBackward:
+                     the car never moves before the beginning of the street.
+     Test-cases:
+                 - ifTheCarAtTheBeginningOfTheStreetThanStay
     */
 
     @Test 
