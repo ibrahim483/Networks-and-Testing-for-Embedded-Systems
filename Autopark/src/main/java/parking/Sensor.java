@@ -1,6 +1,7 @@
 package parking;
 
 public interface Sensor {
-    int[] getDistance();
-
+        int[] getDistance();
+        int[] emptySpace();
+        int[] takenSpace();
     }

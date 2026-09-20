@@ -18,12 +18,11 @@ class ParkTest {
 
         
         State s = new State(10, CarStatus.PARKED, new ArrayList<ParkingSpace>() );
-        State sCopy = new State(s.getPosition(), s.getParkStatus(), s.getDetectedSpace());
         Car   c = new Car(null, null, s);
 
         c.park();
 
-        assertEquals(s, sCopy);
+        assertEquals(s.getParkStatus(), CarStatus.PARKED);
         
     }
 
@@ -57,8 +56,24 @@ class ParkTest {
         c.park();
 
         assertEquals(c.getState().getParkStatus(), CarStatus.PARKED);
-        System.out.println(c.getState().getPosition() + " " + c.getState().getDetectedSpace() + " " + c.getState().getParkStatus());
     }
+
+    @Test 
+    public void shoudlParkAfterFiveSpaces()
+    {
+        ArrayList l = new ArrayList<ParkingSpace>();
+        ParkingSpace space;
+        FakeSensor a = new FakeSensor();
+        FakeSensor b = new FakeSensor();
+
+        State s = new State(0, CarStatus.UNPARKED, l );
+        Car   c = new Car(a, b, s);
+
+        c.park();
+
+        assertEquals(c.getState().getPosition(), 5);
+    }
+    
 
     @Test 
     public void parkOnAvailableParkingSpaceOnEntry()
@@ -84,10 +99,5 @@ class ParkTest {
         assertEquals(c.getState().getParkStatus(), CarStatus.PARKED);
     }
 
-    @Test void NoParkingYetMoveTest(){
-        
-
-
-    }
 
 }

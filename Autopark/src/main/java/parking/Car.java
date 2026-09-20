@@ -20,7 +20,10 @@ public class Car {
         this(sensorA, sensorB, new State(0, CarStatus.UNPARKED, new ArrayList<>()));
     }
 
-
+    /**
+     * 
+     * 
+     */
     public void park(){
 
         int carPosition = cState.getPosition();
@@ -42,24 +45,21 @@ public class Car {
         else
         {
             for (int i = 0; i <= 500 - carPosition; i++) {
-                if (carPosition == 500 && parkingFond == false)
+                if (cState.getPosition() == 500 && parkingFond == false)
                     {
                         cState.setParkingStatus(CarStatus.NOPARKING);
-                        cState.setPosition(newState.getPosition());
-                        cState.setDetectedSpace(newState.getDetectedSpace());
                         return ;
                     }
                 else
                     {
                         newState = moveForward();
-                        counter = cState.isCurrentTaken(i) ? 0 : counter + 1;
+                        System.out.println(cState.getPosition());
+                        counter = newState.isCurrentTaken(i) ? 0 : counter + 1;
                         parkingFond = counter == 5;
                     }
                 if (parkingFond) {
                     System.out.println("parking maneuver..");
                     cState.setParkingStatus(CarStatus.PARKED);
-                    cState.setPosition(newState.getPosition());
-                    cState.setDetectedSpace(newState.getDetectedSpace());
                     return ;
                 }        
                 }
@@ -68,7 +68,9 @@ public class Car {
         }
     }
 
-
+    /**
+     * 
+     */
     public void unPark(){
         if (cState.getParkStatus() == CarStatus.PARKED){
             cState.setParkingStatus(CarStatus.UNPARKED);
@@ -81,9 +83,14 @@ public class Car {
     }
 
 
+    /** 
+     * @return State
+     */
     public State moveForward(){
 
-        if(cState.getPosition() > lengthOfStreet){
+        if(cState.getPosition() >= lengthOfStreet){
+            //this is unreachable by park() since park never calles it when position is 500, might be reachable if other 
+            //methods call it
             System.out.println("Limit Reached can't move forward");  
             return cState;
         } else {
@@ -102,6 +109,9 @@ public class Car {
         return cState;
         }
 
+    /** 
+     * @return State
+     */
     public State moveBackward(){
 
             if(cState.getPosition() == 0){
@@ -116,18 +126,27 @@ public class Car {
         }
 
 
+    /** 
+     * @return State
+     */
     public  State getState(){
         return cState;
     }
+    /** 
+     * @return int
+     */
     public int isEmpty(){
 
         int sumA = 0;
         int sumB = 0;
         boolean aReliable = true;
         boolean bReliable = true;
-        int[] valA = sensorA.getDistance();
-        int[] valB = sensorB.getDistance();
+        //int[] valA = sensorA.getDistance();
+        //int[] valB = sensorB.getDistance();
         
+        int[] valA = sensorA.emptySpace();
+        int[] valB = sensorB.emptySpace();
+
         for (int i = 0 ; i < valA.length ; i++) {
             sumB += valB[i];
             sumA += valA[i]; 
@@ -141,7 +160,6 @@ public class Car {
         for (int i = 0 ; i < valA.length ; i++) {
             if (tempA - sumA >= valA[i] - sumA && tempA - sumA != 0) {
                 tempA = valA[i];
-                System.out.println(tempA);
             }
             if (tempB - sumB >= valB[i] - sumB && tempB - sumB != 0) {
                 tempB = valB[i];
@@ -166,6 +184,9 @@ public class Car {
         return 0; // Both sensors are unreliable
     }
     }
+    /** 
+     * @return State
+     */
     public State whereIs(){
         return this.cState;
     }
