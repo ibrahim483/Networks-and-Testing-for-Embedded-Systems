@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 class ParkTest {
 
@@ -29,7 +28,7 @@ class ParkTest {
     @Test 
     public void endOfStreetNoParkingFound () {
 
-        ArrayList l = new ArrayList<ParkingSpace>();
+        ArrayList<ParkingSpace> l = new ArrayList<ParkingSpace>();
         for (int i = 0; i <= 500; i++) {
             ParkingSpace space = new ParkingSpace(i, true);
             l.add(space);
@@ -45,12 +44,11 @@ class ParkTest {
 
     @Test 
     public void parkWhenAParkingIsAvailable(){
-        ArrayList l = new ArrayList<ParkingSpace>();
-        ParkingSpace space;
-        FakeSensor a = new FakeSensor();
-        FakeSensor b = new FakeSensor();
+        ArrayList<ParkingSpace> l = new ArrayList<ParkingSpace>();
+        FakeSensor a = new FakeSensor(true);
+        FakeSensor b = new FakeSensor(true);
 
-        State s = new State(0, CarStatus.UNPARKED, l );
+        State s = new State(20, CarStatus.UNPARKED, l );
         Car   c = new Car(a, b, s);
 
         c.park();
@@ -61,10 +59,9 @@ class ParkTest {
     @Test 
     public void shoudlParkAfterFiveSpaces()
     {
-        ArrayList l = new ArrayList<ParkingSpace>();
-        ParkingSpace space;
-        FakeSensor a = new FakeSensor();
-        FakeSensor b = new FakeSensor();
+        ArrayList<ParkingSpace> l = new ArrayList<ParkingSpace>();
+        FakeSensor a = new FakeSensor(true);
+        FakeSensor b = new FakeSensor(true);
 
         State s = new State(0, CarStatus.UNPARKED, l );
         Car   c = new Car(a, b, s);
@@ -78,7 +75,7 @@ class ParkTest {
     @Test 
     public void parkOnAvailableParkingSpaceOnEntry()
     {
-        ArrayList l = new ArrayList<ParkingSpace>();
+        ArrayList<ParkingSpace> l = new ArrayList<ParkingSpace>();
         ParkingSpace space;
         for (int i = 0; i <= 500; i++) {
             if (i <= 5 && i >= 0) {
