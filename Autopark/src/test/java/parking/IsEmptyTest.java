@@ -48,7 +48,6 @@ public class IsEmptyTest {
 
         // Act
         int distance = car.isEmpty();
-
         // Assert
         assertEquals(32, distance, "Should return average of reliable sensor B");
     }

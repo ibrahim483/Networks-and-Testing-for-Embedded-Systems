@@ -5,12 +5,12 @@ import java.util.Random;
 public class FakeSensor implements Sensor {
     
     private int[] readings = new int[5]; 
-
+// FakeSensor.java, rad 10-12
     public FakeSensor(int... values) {
-        for(int v = 0 ; v < readings.length; v++) {
+        for(int v = 0 ; v < values.length; v++) {   // readings.length → values.length
             readings[v] = values[v];
-        }
-    }   
+    }
+}
 
 
 
