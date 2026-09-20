@@ -148,9 +148,13 @@ public class Car {
     public  State getState(){
         return cState;
     }
-    /** 
-     * @return int
-     */
+   /**
+     Description: Queries the two ultrasound sensors 5 times, filters noise from the signals (ignoring values outside 0-200 cm), and calculates the distance to the nearest object on the right-hand side.
+      If one sensor continuously returns noisy output, it is completely disregarded.
+     Pre-condition: Both sensorA and sensorB must be initialized and capable of returning distance readings.
+     Post-condition: Returns the calculated reliable average distance in cm as an integer. The car's position and status remain unchanged.
+     Test-cases: isEmpty_bothSensorsReliable_returnsAverageOfBoth, isEmpty_sensorBUnreliable_returnsAverageOfSensorA, isEmpty_sensorAUnreliable_returnsAverageOfSensorB
+    */
     public int isEmpty(){
 
         int sumA = 0;
@@ -200,9 +204,12 @@ public class Car {
         return 0; // Both sensors are unreliable
     }
     }
-    /** 
-     * @return State
-     */
+    /**
+     Description: Returns the current position of the car in the street as well as its parked, unparked, or no-parking status.
+     Pre-condition: The car's internal state (cState) has been instantiated.
+     Post-condition: The car's state variables remain completely unchanged. The current State object is returned to the caller.
+     Test-cases: whereIs_carUnparked_returnPositionandstatusUnparked, whereIs_carParked_returnPositionandstatusParked, whereIs_noparking_returnpositionandstatusNoparking
+    */
     public State whereIs(){
         return this.cState;
     }
