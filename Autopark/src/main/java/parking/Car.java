@@ -38,7 +38,6 @@ public class Car {
         CarStatus status = cState.getParkStatus();
         int counter = cState.validParkingSpace(carPosition);
         ArrayList<ParkingSpace> parkings= cState.getDetectedSpace();        
-        State newState = new State(carPosition, status, parkings);
 
 
         if (status == CarStatus.PARKED){
@@ -54,25 +53,27 @@ public class Car {
         {
             for (int i = 0; i <= 500 - carPosition; i++) {
                 if (cState.getPosition() == 500 && parkingFond == false)
-                    {
-                        cState.setParkingStatus(CarStatus.NOPARKING);
-                        return ;
-                    }
-                else
-                    {
-                        newState = moveForward();
-                        System.out.println(cState.getPosition());
-                        counter = newState.isCurrentTaken(i) ? 0 : counter + 1;
-                        parkingFond = counter == 5;
-                    }
-                if (parkingFond) {
+                {
+                    cState.setParkingStatus(CarStatus.NOPARKING);
+                    return ;
+                }
+                else if (parkingFond) 
+                {
                     System.out.println("parking maneuver..");
                     cState.setParkingStatus(CarStatus.PARKED);
                     return ;
-                }        
+                }       
+                else
+                {
+                    carPosition = cState.getPosition();
+                    moveForward();
+                    counter = cState.isCurrentTaken(carPosition) ? 0 : counter + 1;
+                    parkingFond = counter == 5;
                 }
+                 
+            }
 
-                return ;
+            return ;
         }
     }
 
@@ -107,17 +108,17 @@ public class Car {
             System.out.println("Limit Reached can't move forward");  
             return cState;
         } else {
-            cState.setPosition(cState.getPosition() + 1);
-
+            
             int distance = isEmpty();
             if (distance >= 100 && distance <= 200) {
                 ParkingSpace parking1 =  new ParkingSpace(cState.getPosition(), false);
                 cState.addDetectedSpace(parking1);
-
+                
             }else{
                 ParkingSpace parking2 =  new ParkingSpace(cState.getPosition(), true);
                 cState.addDetectedSpace(parking2);
             }
+            cState.setPosition(cState.getPosition() + 1);
         }
         return cState;
         }

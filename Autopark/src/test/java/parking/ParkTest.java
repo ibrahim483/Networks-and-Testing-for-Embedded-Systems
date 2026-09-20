@@ -48,7 +48,7 @@ class ParkTest {
         FakeSensor a = new FakeSensor(true);
         FakeSensor b = new FakeSensor(true);
 
-        State s = new State(20, CarStatus.UNPARKED, l );
+        State s = new State(0, CarStatus.UNPARKED, l );
         Car   c = new Car(a, b, s);
 
         c.park();
