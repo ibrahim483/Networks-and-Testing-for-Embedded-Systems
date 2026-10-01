@@ -1,11 +1,12 @@
 package parking;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ParkingStretch {
     private int startPosition;
     private int length;
-    private ArrayList<Integer> Spots = new ArrayList<>();
+    private List<ParkingStretch> Spots = new ArrayList<>();
     public ParkingStretch(int startPosition, int length){
         this.startPosition = startPosition;
         this.length = length;
