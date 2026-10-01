@@ -1,7 +1,7 @@
 package parking;
 
 abstract class ParkingRoutine {
-    void execute(){
+   public final void execute(){
     }
     abstract ParkingSpace findSpace();
 
