@@ -11,8 +11,16 @@ public class ParkingStretch {
         this.length = length;
     }
     public int getParkingSlot(int startPosition){
-        
-
+        int count = 0;
+        for(int i = 0; i < 500; i++){
+            if(isSuitable()){
+                count++;
+            }
+            else{
+                break;
+            }
+        }
+        return count;
     }
 
 
