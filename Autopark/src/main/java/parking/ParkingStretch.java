@@ -10,15 +10,13 @@ public class ParkingStretch {
         this.startPosition = startPosition;
         this.length = length;
     }
-    public int getParkingSlot(int startPosition){
+    public int getParkingSlot(int startPosition, State state){
         int count = 0;
-        for(int i = 0; i < 500; i++){
-            if(isSuitable()){
-                count++;
-            }
-            else{
+        for(int i = startPosition ; i < 500 && i > state.getDetectedSpace().size(); i++) {
+            if (state.isCurrentTaken(i)) {
                 break;
             }
+            count++;
         }
         return count;
     }
