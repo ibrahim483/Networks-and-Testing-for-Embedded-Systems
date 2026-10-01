@@ -21,7 +21,15 @@ public class Car {
     }
 
     /**
-     * 
+     * Description: If the car is already at the end of a free 5 m stretch it parks
+     *              immediately; otherwise it drives forward, one meter at a time,
+     *              until 5 consecutive free positions have been detected, then parks.
+     *              If the end of the street is reached without a stretch, the status
+     *              becomes NOPARKING.
+     * Pre-condition:  none (a car that is already PARKED is left unchanged).
+     * Post-condition: This method guarantees that the car will end up either parked at a 
+     *                 position i that is the end of a parking stretch, or that the car 
+     *                 successfully understands that there is no available parking.
      * 
      */
     public void park(){
@@ -30,7 +38,6 @@ public class Car {
         CarStatus status = cState.getParkStatus();
         int counter = cState.validParkingSpace(carPosition);
         ArrayList<ParkingSpace> parkings= cState.getDetectedSpace();        
-        State newState = new State(carPosition, status, parkings);
 
 
         if (status == CarStatus.PARKED){
@@ -46,30 +53,34 @@ public class Car {
         {
             for (int i = 0; i <= 500 - carPosition; i++) {
                 if (cState.getPosition() == 500 && parkingFond == false)
-                    {
-                        cState.setParkingStatus(CarStatus.NOPARKING);
-                        return ;
-                    }
-                else
-                    {
-                        newState = moveForward();
-                        System.out.println(cState.getPosition());
-                        counter = newState.isCurrentTaken(i) ? 0 : counter + 1;
-                        parkingFond = counter == 5;
-                    }
-                if (parkingFond) {
+                {
+                    cState.setParkingStatus(CarStatus.NOPARKING);
+                    return ;
+                }
+                else if (parkingFond) 
+                {
                     System.out.println("parking maneuver..");
                     cState.setParkingStatus(CarStatus.PARKED);
                     return ;
-                }        
+                }       
+                else
+                {
+                    carPosition = cState.getPosition();
+                    moveForward();
+                    counter = cState.isCurrentTaken(carPosition) ? 0 : counter + 1;
+                    parkingFond = counter == 5;
                 }
+                 
+            }
 
-                return ;
+            return ;
         }
     }
 
     /**
-     * 
+     * Description: Releases a parked car so it can drive again.
+     * Pre-condition:  none (if the car is not PARKED nothing changes).
+     * Post-condition: status == UNPARKED if it was PARKED, else unchanged.
      */
     public void unPark(){
         if (cState.getParkStatus() == CarStatus.PARKED){
@@ -90,31 +101,24 @@ public class Car {
      Post-condition: If the limit was reached, the state is unchanged and "Limit Reached can't move forward"
                      is printed. Otherwise the position is increased by 1 and exactly one ParkingSpace
                      for the new position is added to the detected spaces. The current State is returned.
-     Test-cases: moveForwardTest
-                 - the position increases by 1 after one call
-                 - the detected space of the next position is recorded as not taken
-                 - the position is recorded correctly after 500 moves (end of the street)
-                 - at the end of the street the car does not move and "Limit Reached" is signalled
     */
     public State moveForward(){
 
         if(cState.getPosition() >= lengthOfStreet){
-            //this is unreachable by park() since park never calles it when position is 500, might be reachable if other 
-            //methods call it
             System.out.println("Limit Reached can't move forward");  
             return cState;
         } else {
-            cState.setPosition(cState.getPosition() + 1);
-
+            
             int distance = isEmpty();
             if (distance >= 100 && distance <= 200) {
                 ParkingSpace parking1 =  new ParkingSpace(cState.getPosition(), false);
                 cState.addDetectedSpace(parking1);
-
+                
             }else{
                 ParkingSpace parking2 =  new ParkingSpace(cState.getPosition(), true);
                 cState.addDetectedSpace(parking2);
             }
+            cState.setPosition(cState.getPosition() + 1);
         }
         return cState;
         }
@@ -161,11 +165,10 @@ public class Car {
         int sumB = 0;
         boolean aReliable = true;
         boolean bReliable = true;
-        //int[] valA = sensorA.getDistance();
-        //int[] valB = sensorB.getDistance();
+        int[] valA = sensorA.getDistance();
+        int[] valB = sensorB.getDistance();
         
-        int[] valA = sensorA.emptySpace();
-        int[] valB = sensorB.emptySpace();
+        
 
         for (int i = 0 ; i < valA.length ; i++) {
             sumB += valB[i];

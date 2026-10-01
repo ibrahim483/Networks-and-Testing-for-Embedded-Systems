@@ -14,9 +14,18 @@ public class FakeSensor implements Sensor {
         }
     } 
     
-    public FakeSensor(){
-        readings = new int[5];
+    public FakeSensor(boolean empty){
+        readings = new int [5];
+        if (empty) {
+            
+            readings = emptySpace();
+        }
+        else
+        {
+            readings = takenSpace();
+        }
     }
+    
 
 
 
