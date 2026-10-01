@@ -2,14 +2,12 @@ package parking;
 
 abstract class ParkingRoutine {
    public final void execute(){
-    }
-    abstract ParkingSpace findSpace();
+   }
+   abstract ParkingSpace findSpace();
+   void driveToEnd(){}
 
-     void moveToSpace(){
-
-     }
-     void performParking(){
-
-     }
+   void moveToSpace(){}
+   
+   void park(){}
 
 }
