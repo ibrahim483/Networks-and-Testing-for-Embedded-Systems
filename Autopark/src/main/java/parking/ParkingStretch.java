@@ -10,6 +10,10 @@ public class ParkingStretch {
         this.startPosition = startPosition;
         this.length = length;
     }
+    public int getParkingSlot(int startPosition){
+        
+
+    }
 
 
     public int getStartPosition() {
