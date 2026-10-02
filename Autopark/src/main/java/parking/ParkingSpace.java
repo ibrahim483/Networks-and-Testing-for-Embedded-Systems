@@ -7,15 +7,20 @@ public class ParkingSpace {
     private final boolean taken;
     
     
-        public ParkingSpace(int position, boolean status) {
+        public ParkingSpace(int position, boolean taken) {
         this.position = position;
-        this.taken = status;
+        this.taken = taken;
     }
 
 
     public boolean isTaken()
     {
         return taken;
+    }
+
+    public int getPosition()
+    {
+        return position;
     }
 
     @Override 

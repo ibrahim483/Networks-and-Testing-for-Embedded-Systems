@@ -1,19 +1,18 @@
 package parking;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class FirstSuitableRoutine extends ParkingRoutine{
-    private List<ParkingStretch> spots;
-
-    public FirstSuitableRoutine(List<ParkingStretch> spots){
-        this.spots = spots;
+public class FirstSuitableRoutine extends ParkingRoutine {
+    public FirstSuitableRoutine(Car car) {
+        super(car);
     }
+
+    /** Return the first stretch with length >= 5, or null. Input is in street order. */
     @Override
-    ParkingStretch findSpace(){
-        for(ParkingStretch spot : spots){
-            if(spot.isSuitable()){
-                return spot;
+    public ParkingStretch findSpace(List<ParkingStretch> spaces) {
+        for (ParkingStretch space : spaces) {
+            if (space.isSuitable()) {
+                return space;
             }
         }
         return null;

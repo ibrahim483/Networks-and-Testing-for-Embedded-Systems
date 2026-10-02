@@ -6,21 +6,12 @@ import java.util.List;
 public class ParkingStretch {
     private int startPosition;
     private int length;
-    private List<ParkingStretch> Spots = new ArrayList<>();
+
     public ParkingStretch(int startPosition, int length){
         this.startPosition = startPosition;
         this.length = length;
     }
-    public int getParkingSlot(int startPosition, State state){
-        int count = 0;
-        for(int i = startPosition ; i < 500 && i > state.getDetectedSpace().size(); i++) {
-            if (state.isCurrentTaken(i)) {
-                break;
-            }
-            count++;
-        }
-        return count;
-    }
+
 
 
     public int getStartPosition() {
