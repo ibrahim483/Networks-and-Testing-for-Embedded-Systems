@@ -1,6 +1,7 @@
 package parking;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class State {
     private  int currentPosition = 0;
@@ -101,4 +102,7 @@ public class State {
             && this.detectedSpaces.equals(s.detectedSpaces);
     }
 
+    public List<ParkingStretch> getParkingStretches() {
+        return null;
+    }
 }
