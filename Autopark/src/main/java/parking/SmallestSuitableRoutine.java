@@ -1,7 +1,9 @@
 package parking;
 
 public class SmallestSuitableRoutine extends ParkingRoutine{
-    ParkingStretch findSpace(){
+
+
+    ParkingSpace findSpace(){
         return null;
     }
 }

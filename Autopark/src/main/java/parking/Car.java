@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Car {
     private State cState ;
+    private Actuator actuator;
     private boolean parkingFond = false;
     private final int lengthOfStreet = 500;
     private  Sensor sensorA;
@@ -104,11 +105,6 @@ public class Car {
     */
     public State moveForward(){
 
-        if(cState.getPosition() >= lengthOfStreet){
-            System.out.println("Limit Reached can't move forward");  
-            return cState;
-        } else {
-            
             int distance = isEmpty();
             if (distance >= 100 && distance <= 200) {
                 ParkingSpace parking1 =  new ParkingSpace(cState.getPosition(), false);
@@ -119,7 +115,6 @@ public class Car {
                 cState.addDetectedSpace(parking2);
             }
             cState.setPosition(cState.getPosition() + 1);
-        }
         return cState;
         }
 
