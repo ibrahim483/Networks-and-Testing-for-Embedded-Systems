@@ -7,7 +7,7 @@ abstract class ParkingRoutine {
 
  public ParkingRoutine(Car car){this.car = car; }
 
-   public final void execute(){
+   public final boolean execute(){
     State state = car.getState();
     if (state.getParkStatus() == CarStatus.PARKED) {
      return true;
