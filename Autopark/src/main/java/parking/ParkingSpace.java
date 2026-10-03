@@ -25,6 +25,7 @@ public class ParkingSpace {
 
     @Override 
     public boolean equals(Object o){
+
         ParkingSpace p = (ParkingSpace) o ;
 
         return p.taken == this.taken && p.position == this.position;

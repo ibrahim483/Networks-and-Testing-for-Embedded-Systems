@@ -5,7 +5,7 @@ import java.util.List;
 
 public class State {
     private  int currentPosition = 0;
-    private  CarStatus status = CarStatus.UNPARKED;
+    private  CarStatus status;
     private  ArrayList<ParkingSpace> detectedSpaces;
 
 
@@ -36,7 +36,12 @@ public class State {
 
     public boolean isCurrentTaken(int i)
     {
-        return detectedSpaces.get(i).isTaken();
+        for (ParkingSpace space : detectedSpaces) {
+            if(space.getPosition() == i){
+                return space.isTaken();
+            }
+        }
+        return true;
     }
     
     public void setPosition(int position) {
@@ -48,38 +53,24 @@ public class State {
     }
 
     public void addDetectedSpace(ParkingSpace space) {
+        for (int i = 0; i < detectedSpaces.size(); i++) {
+            if (detectedSpaces.get(i).getPosition() == space.getPosition()) {
+                detectedSpaces.set(i, space);
+                return;
+            }
+        }
         detectedSpaces.add(space);
     }
 
-    public void clearDetectedSpaces() {
-        detectedSpaces.clear();
-    }
-
-    public void removeDetectedSpace(ParkingSpace space) {
-        detectedSpaces.remove(space);
-    }
-
-    public void updateDetectedSpace(int index, ParkingSpace space) {
-        detectedSpaces.set(index, space);
-    }
-
-    public boolean isDetectedSpacesFull() {
-        return detectedSpaces.size() >= 500;
-    }
-
-    public boolean isDetectedSpacesEmpty() {
-        return detectedSpaces.isEmpty();
-    }
-
     public int validParkingSpace(int index) {
-        
+
         int count = 0;
         if (detectedSpaces.isEmpty()) {
             return 0;
         }
         for(int i = index ; i > index - 5 ; i--)
         {
-            if (i >= 0 && !detectedSpaces.get(i).isTaken())
+            if (i >= 0 && !isCurrentTaken(i))
             {
                 count++;
             }
@@ -103,6 +94,16 @@ public class State {
     }
 
     public List<ParkingStretch> getParkingStretches() {
-        return null;
+        List<ParkingStretch> stretches = new ArrayList<>();
+        int length = 0;
+        for (int i = 0; i <= Car.STREET_LENGTH; i++) {
+            if (i < Car.STREET_LENGTH && !isCurrentTaken(i)) {
+                length++;
+            } else if (length > 0) {
+                stretches.add(new ParkingStretch(i - length, length));
+                length = 0;
+            }
+        }
+        return stretches;
     }
 }

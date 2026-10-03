@@ -27,7 +27,7 @@ public class Car {
     }
 
     public Car(Sensor sensorA, Sensor sensorB, Actuator actuator) {
-        this(sensorA, sensorB, new State(0, CarStatus.UNPARKED, new ArrayList<>()), actuator);
+        this(sensorA, sensorB, new State(actuator.getPosition(), CarStatus.UNPARKED, new ArrayList<>()), actuator);
     }
 
     public Car(Sensor sensorA, Sensor sensorB) {
@@ -50,7 +50,7 @@ public class Car {
 
         int carPosition = cState.getPosition();
         CarStatus status = cState.getParkStatus();
-        int counter = cState.validParkingSpace(carPosition);
+        int counter = cState.validParkingSpace(carPosition -1);
         ArrayList<ParkingSpace> parkings= cState.getDetectedSpace();
         boolean parkingFond = false;
 
@@ -66,7 +66,7 @@ public class Car {
         }
         else
         {
-            for (int i = 0; i <= 500 - carPosition; i++) {
+            for (int i = carPosition; i <= STREET_LENGTH; i++) {
                 if (cState.getPosition() == 500 && parkingFond == false)
                 {
                     cState.setParkingStatus(CarStatus.NOPARKING);
@@ -82,6 +82,9 @@ public class Car {
                 {
                     carPosition = cState.getPosition();
                     moveForward();
+                    if (cState.getPosition() == carPosition) {
+                        return;
+                    }
                     counter = cState.isCurrentTaken(carPosition) ? 0 : counter + 1;
                     parkingFond = counter == 5;
                 }
@@ -124,8 +127,8 @@ public class Car {
             return cState;
         } else {
 
-            if (actuator != null) {
-                actuator.moveForward();
+            if (actuator != null && !actuator.moveForward()) {
+                return cState;
             }
 
             int distance = isEmpty();
@@ -157,8 +160,8 @@ public class Car {
             System.out.println("The car can't move backward you are at the beginning of the street");
             return cState;
         } else {
-            if (actuator != null) {
-                actuator.moveBackward();
+            if (actuator != null && !actuator.moveBackward()) {
+                return cState;
             }
             cState.setPosition(cState.getPosition() - 1);
 
