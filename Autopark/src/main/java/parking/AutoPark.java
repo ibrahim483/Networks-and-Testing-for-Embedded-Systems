@@ -7,7 +7,7 @@ public class AutoPark {
     private Car c; 
     private ArrayList<ParkingSpace> parkings;
 
-    public void driveToEnd(){
+    public void tryToPark(){
         
         c.moveForward();
     }

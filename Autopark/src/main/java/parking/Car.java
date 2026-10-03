@@ -11,15 +11,21 @@ public class Car {
     private  Sensor sensorA;
     private  Sensor sensorB;
 
-    public Car(Sensor sensorA, Sensor sensorB, State cState) {
+    public Car(Sensor sensorA, Sensor sensorB, State cState, Actuator actuator) {
         this.sensorA = sensorA;
         this.sensorB = sensorB;
         this.cState  = cState;
+        this.actuator = actuator;
     }
 
-    public Car(Sensor sensorA, Sensor sensorB) {
-        this(sensorA, sensorB, new State(0, CarStatus.UNPARKED, new ArrayList<>()));
+    // Baseline compatibility for existing Phase 1 tests; actuator integration remains Phase 2 work.
+    public Car(Sensor sensorA, Sensor sensorB, State cState) {
+        this(sensorA, sensorB, cState, null);
     }
+
+    // public Car(Sensor sensorA, Sensor sensorB) {
+    //     this(sensorA, sensorB, new State(0, CarStatus.UNPARKED, new ArrayList<>()));
+    // }
 
     /**
      * Description: If the car is already at the end of a free 5 m stretch it parks
@@ -105,16 +111,21 @@ public class Car {
     */
     public State moveForward(){
 
+            if (actuator != null && !actuator.moveForward()) {
+                return cState;
+            }
             int distance = isEmpty();
+
+            ParkingSpace newParkingSpace;
             if (distance >= 100 && distance <= 200) {
-                ParkingSpace parking1 =  new ParkingSpace(cState.getPosition(), false);
-                cState.addDetectedSpace(parking1);
+                newParkingSpace =  new ParkingSpace(cState.getPosition(), false); //false neans the space is not taken
+                cState.addDetectedSpace(newParkingSpace);
                 
             }else{
-                ParkingSpace parking2 =  new ParkingSpace(cState.getPosition(), true);
-                cState.addDetectedSpace(parking2);
+                newParkingSpace =  new ParkingSpace(cState.getPosition(), true);
+                cState.addDetectedSpace(newParkingSpace);
             }
-            cState.setPosition(cState.getPosition() + 1);
+            setPosition(actuator.getPosition());
         return cState;
         }
 
@@ -128,15 +139,13 @@ public class Car {
                  - at the beginning of the street (position 0) the car stays at position 0
     */
     public State moveBackward(){
-
-            if(cState.getPosition() == 0){
-                System.out.println("The car can't move backward you are at the beginning of the street");  
+            if (actuator != null && !actuator.moveBackward()) {
                 return cState;
-        } else {
-            cState.setPosition(cState.getPosition() - 1);
-
-        }
-            return cState;
+            }
+            else {
+                cState.setPosition(actuator.getPosition());
+            }
+        return cState;
 
         }
 
@@ -203,6 +212,14 @@ public class Car {
      */
     public State whereIs(){
         return this.cState;
+    }
+
+    public void setState(State state){
+        this.cState = state;
+    }
+
+    public void setPosition(int position){
+        this.cState.setPosition(position);
     }
 }
 

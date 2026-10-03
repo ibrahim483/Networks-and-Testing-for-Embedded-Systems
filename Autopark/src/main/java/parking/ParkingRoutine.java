@@ -3,7 +3,7 @@ package parking;
 abstract class ParkingRoutine {
    public final void execute(){
    }
-   abstract ParkingSpace findSpace();
+   abstract ParkingStretch findSpace();
    void driveToEnd(){}
 
    void moveToSpace(){}
