@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.AdditionalAnswers.delegatesTo;
 
 public class NoParkingIntegrationTest {
+    int actuatorPosition;
 
     @Test
     void reportsNoParkingWhenAllSpacesAreTooSmall() {
@@ -19,29 +19,69 @@ public class NoParkingIntegrationTest {
         );
 
         Actuator actuator = mock(Actuator.class);
-        int[] actuatorPosition = {0};
+        actuatorPosition = 0;
 
         when(actuator.getPosition())
-                .thenAnswer(invocation -> actuatorPosition[0]);
+                .thenAnswer(invocation -> actuatorPosition);
 
         when(actuator.moveForward()).thenAnswer(invocation -> {
-            if (actuatorPosition[0] >= Car.STREET_LENGTH) {
+            if (actuatorPosition >= Car.STREET_LENGTH) {
                 return false;
             }
-            actuatorPosition[0]++;
+            actuatorPosition++;
             return true;
         });
 
-        Sensor sensorA = mock(
-                Sensor.class,
-                delegatesTo(new StreetSensor(actuator, spaces, 250))
-        );
+        Sensor sensorA = mock(Sensor.class);
+        boolean[] sensorABroken = {false};
 
-        Sensor sensorB = mock(
-                Sensor.class,
-                delegatesTo(new StreetSensor(actuator, spaces, -1))
-        );
+        when(sensorA.getDistance()).thenAnswer(invocation -> {
+            int position = actuator.getPosition();
 
+            if (position >= 250) {
+                sensorABroken[0] = true;
+            }
+
+            if (sensorABroken[0]) {
+                return new int[] {1000, 1000, 1000, 1000, 1000};
+            }
+
+            int cell = Math.max(0, position - 1);
+            int distance = 30;
+
+            for (ParkingStretch space : spaces) {
+                if (cell >= space.getStartPosition()
+                        && cell < space.getEndPosition()) {
+                    distance = 150;
+                    break;
+                }
+            }
+
+            return new int[] {
+                    distance - 2, distance - 1, distance,
+                    distance + 1, distance + 2
+            };
+        });
+
+        Sensor sensorB = mock(Sensor.class);
+
+        when(sensorB.getDistance()).thenAnswer(invocation -> {
+            int cell = Math.max(0, actuator.getPosition() - 1);
+            int distance = 30;
+
+            for (ParkingStretch space : spaces) {
+                if (cell >= space.getStartPosition()
+                        && cell < space.getEndPosition()) {
+                    distance = 150;
+                    break;
+                }
+            }
+
+            return new int[] {
+                    distance - 2, distance - 1, distance,
+                    distance + 1, distance + 2
+            };
+        });
         Car car = new Car(sensorA, sensorB, actuator);
         FirstSuitableRoutine routine = new FirstSuitableRoutine(car);
 
