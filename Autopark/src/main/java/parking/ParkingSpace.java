@@ -7,9 +7,9 @@ public class ParkingSpace {
     private final boolean taken;
     
     
-        public ParkingSpace(int position, boolean status) {
+        public ParkingSpace(int position, boolean taken) {
         this.position = position;
-        this.taken = status;
+        this.taken = taken;
     }
 
 
@@ -18,8 +18,14 @@ public class ParkingSpace {
         return taken;
     }
 
+    public int getPosition()
+    {
+        return position;
+    }
+
     @Override 
     public boolean equals(Object o){
+
         ParkingSpace p = (ParkingSpace) o ;
 
         return p.taken == this.taken && p.position == this.position;
