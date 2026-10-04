@@ -7,7 +7,7 @@ public class Car {
     /** Used by ParkingRoutine. */
     private  static final int STREET_LENGTH = 500;
 
-    private State cState ;
+    private  State cState ;
     private  Sensor sensorA;
     private  Sensor sensorB;
     private  Actuator actuator;
@@ -58,7 +58,10 @@ public class Car {
                 }   
                 else
                 {
-                    moveForward();
+                    State s = moveForward();
+                    if(s.getParkStatus() == CarStatus.SENSORERROR){
+                        return ;
+                    }
                 }
             }
             for (int i = 0; i < STREET_LENGTH - stretch.getStartPosition(); i++) {
@@ -109,6 +112,10 @@ public class Car {
                 return cState;
             }
             int distance = isEmpty();
+            if(distance == -1){
+                System.out.println("Both sensor failed. Stopping the car!");
+                return new State(cState.getPosition(), CarStatus.SENSORERROR, cState.getDetectedSpace());
+            }
 
             ParkingSpace newParkingSpace;
             if (distance >= 100 && distance <= 200) {
@@ -202,7 +209,7 @@ public class Car {
         } else if (bReliable) {
             return tempB;
         } else {
-            return 0; // Both sensors are unreliable
+            return -1; // Both sensors are unreliable
         }
     }
     /**

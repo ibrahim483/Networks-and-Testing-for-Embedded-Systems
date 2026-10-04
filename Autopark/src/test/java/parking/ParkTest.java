@@ -38,7 +38,7 @@ class ParkTest {
         simulationState = new State(simulationPosition, CarStatus.UNPARKED, pSpaces);
         c = new Car(sensorA, sensorB, simulationState, actuator);
         reader = new StreetFileReader();
-        streetList = reader.readStreet("C:\\Users\\khaawa22\\Documents\\GitHub\\Networks-and-Testing-for-Embedded-Systems\\Street.txt");
+        streetList = reader.readStreet("Street.txt");
 
         simulationPosition = c.getState().getPosition();
         when(actuator.getPosition()).thenAnswer(invocation -> simulationPosition);
