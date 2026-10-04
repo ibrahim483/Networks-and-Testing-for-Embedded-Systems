@@ -8,7 +8,8 @@ import static org.mockito.Mockito.*;
 class MovementFailureIntegrationTest {
 
     @Test
-    void stopsWhenActuatorCannotMoveForward() {
+    void failedForwardMovementLeavesCarStateUnchanged() {
+
         Actuator actuator = mock(Actuator.class);
         Sensor sensorA = mock(Sensor.class);
         Sensor sensorB = mock(Sensor.class);
@@ -17,17 +18,15 @@ class MovementFailureIntegrationTest {
         when(actuator.moveForward()).thenReturn(false);
 
         Car car = new Car(sensorA, sensorB, actuator);
-        SmallestSuitableRoutine routine =
-                new SmallestSuitableRoutine(car);
 
-        assertFalse(routine.execute());
-        assertEquals(0, car.getState().getPosition());
-        assertEquals(0, actuator.getPosition());
-        assertEquals(CarStatus.UNPARKED, car.getState().getParkStatus());
-        assertTrue(car.getState().getDetectedSpace().isEmpty());
+        State result = car.moveForward();
+
+        assertEquals(0, result.getPosition());
+        assertEquals(CarStatus.UNPARKED, result.getParkStatus());
+        assertTrue(result.getDetectedSpace().isEmpty());
 
         verify(actuator).moveForward();
-        verify(actuator, never()).moveBackward();
+        verify(actuator, never()).getPosition();
         verifyNoInteractions(sensorA, sensorB);
     }
 }

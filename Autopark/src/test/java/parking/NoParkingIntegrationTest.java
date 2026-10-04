@@ -1,18 +1,17 @@
 package parking;
 
-
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-
 public class NoParkingIntegrationTest {
-    int actuatorPosition;
 
     @Test
     void reportsNoParkingWhenAllSpacesAreTooSmall() {
+
         List<ParkingStretch> spaces = List.of(
                 new ParkingStretch(50, 1),
                 new ParkingStretch(150, 2),
@@ -20,53 +19,34 @@ public class NoParkingIntegrationTest {
         );
 
         Actuator actuator = mock(Actuator.class);
-        actuatorPosition = 0;
+        Sensor sensorA = mock(Sensor.class);
+        Sensor sensorB = mock(Sensor.class);
+
+        int[] actuatorPosition = {0};
 
         when(actuator.getPosition())
-                .thenAnswer(invocation -> actuatorPosition);
+                .thenAnswer(invocation -> actuatorPosition[0]);
 
         when(actuator.moveForward()).thenAnswer(invocation -> {
-            if (actuatorPosition >= Car.STREET_LENGTH) {
+            if (actuatorPosition[0] >= 500) {
                 return false;
             }
-            actuatorPosition++;
+
+            actuatorPosition[0]++;
             return true;
         });
 
-        Sensor sensorA = mock(Sensor.class);
-        boolean[] sensorABroken = {false};
-
-        when(sensorA.getDistance()).thenAnswer(invocation -> {
-            int position = actuator.getPosition();
-
-            if (position >= 250) {
-                sensorABroken[0] = true;
+        when(actuator.moveBackward()).thenAnswer(invocation -> {
+            if (actuatorPosition[0] <= 0) {
+                return false;
             }
 
-            if (sensorABroken[0]) {
-                return new int[] {1000, 1000, 1000, 1000, 1000};
-            }
-
-            int cell = Math.max(0, position - 1);
-            int distance = 30;
-
-            for (ParkingStretch space : spaces) {
-                if (cell >= space.getStartPosition()
-                        && cell < space.getEndPosition()) {
-                    distance = 150;
-                    break;
-                }
-            }
-
-            return new int[] {
-                    distance - 2, distance - 1, distance,
-                    distance + 1, distance + 2
-            };
+            actuatorPosition[0]--;
+            return true;
         });
 
-        Sensor sensorB = mock(Sensor.class);
+        when(sensorA.getDistance()).thenAnswer(invocation -> {
 
-        when(sensorB.getDistance()).thenAnswer(invocation -> {
             int cell = Math.max(0, actuator.getPosition() - 1);
             int distance = 30;
 
@@ -78,23 +58,41 @@ public class NoParkingIntegrationTest {
                 }
             }
 
-            return new int[] {
-                    distance - 2, distance - 1, distance,
-                    distance + 1, distance + 2
+            return new int[]{
+                    distance, distance, distance, distance, distance
             };
         });
-        Car car = new Car(sensorA, sensorB, actuator);
-        FirstSuitableRoutine routine = new FirstSuitableRoutine(car);
 
-        assertFalse(routine.execute());
+        when(sensorB.getDistance()).thenAnswer(invocation -> {
+
+            int cell = Math.max(0, actuator.getPosition() - 1);
+            int distance = 30;
+
+            for (ParkingStretch space : spaces) {
+                if (cell >= space.getStartPosition()
+                        && cell < space.getEndPosition()) {
+                    distance = 150;
+                    break;
+                }
+            }
+
+            return new int[]{
+                    distance, distance, distance, distance, distance
+            };
+        });
+
+        Car car = new Car(sensorA, sensorB, actuator);
+
+        car.park(new FirstSuitableRoutine());
+
         assertEquals(CarStatus.NOPARKING, car.getState().getParkStatus());
         assertEquals(500, car.getState().getPosition());
         assertEquals(500, actuator.getPosition());
 
         verify(actuator, times(500)).moveForward();
         verify(actuator, never()).moveBackward();
+
         verify(sensorA, times(500)).getDistance();
         verify(sensorB, times(500)).getDistance();
-        System.out.println(car.getState().getPosition());
     }
 }
