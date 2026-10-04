@@ -1,21 +1,23 @@
 package parking;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FirstSuitableRoutine extends ParkingRoutine{
-    private List<ParkingStretch> spots;
 
-    public FirstSuitableRoutine(List<ParkingStretch> spots){
-        this.spots = spots;
-    }
     @Override
-    ParkingStretch findSpace(){
-        for(ParkingStretch spot : spots){
-            if(spot.isSuitable()){
-                return spot;
-            }
+    ParkingStretch findSpace(ArrayList<ParkingSpace> pSpace){
+        int count = 0;
+        ParkingStretch s = new ParkingStretch(0, 0);
+        for (int i = pSpace.size() - 1; i >= 0; i--) {
+            if (!pSpace.get(i).isTaken()) {
+                count++;
+                if (count == 5) {
+                    s = new ParkingStretch(i, count);
+                    return s;
+                }
+            }else{count = 0;}
         }
-        return null;
+        
+        return s;
     }
 }

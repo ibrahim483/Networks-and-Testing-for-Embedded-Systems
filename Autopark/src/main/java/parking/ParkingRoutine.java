@@ -1,13 +1,8 @@
 package parking;
 
+import java.util.ArrayList;
+
 abstract class ParkingRoutine {
-   public final void execute(){
-   }
-   abstract ParkingStretch findSpace();
-   void driveToEnd(){}
-
-   void moveToSpace(){}
    
-   void park(){}
-
+   abstract ParkingStretch findSpace(ArrayList<ParkingSpace> pSpace);
 }

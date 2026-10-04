@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class Car {
     private State cState ;
     private Actuator actuator;
-    private boolean parkingFond = false;
     private final int lengthOfStreet = 500;
     private  Sensor sensorA;
     private  Sensor sensorB;
@@ -27,60 +26,42 @@ public class Car {
     //     this(sensorA, sensorB, new State(0, CarStatus.UNPARKED, new ArrayList<>()));
     // }
 
-    /**
-     * Description: If the car is already at the end of a free 5 m stretch it parks
-     *              immediately; otherwise it drives forward, one meter at a time,
-     *              until 5 consecutive free positions have been detected, then parks.
-     *              If the end of the street is reached without a stretch, the status
-     *              becomes NOPARKING.
-     * Pre-condition:  none (a car that is already PARKED is left unchanged).
-     * Post-condition: This method guarantees that the car will end up either parked at a 
-     *                 position i that is the end of a parking stretch, or that the car 
-     *                 successfully understands that there is no available parking.
-     * 
-     */
-    public void park(){
+    
+    public void park(ParkingRoutine parking){
 
         int carPosition = cState.getPosition();
         CarStatus status = cState.getParkStatus();
-        int counter = cState.validParkingSpace(carPosition);
-        ArrayList<ParkingSpace> parkings= cState.getDetectedSpace();        
-
-
+        ParkingStretch stretch = new ParkingStretch(0, 0);
         if (status == CarStatus.PARKED){
             System.out.println("Car is Already Parked...");
         }
-        else if (counter == 5) {
-            System.out.println("Parking maneuver...");
-            cState.setDetectedSpace(parkings);
-            cState.setParkingStatus(CarStatus.PARKED);
-            cState.setPosition(carPosition);
-        }
         else
         {
-            for (int i = 0; i <= 500 - carPosition; i++) {
-                if (cState.getPosition() == 500 && parkingFond == false)
+            for (int i = 0; i <= lengthOfStreet - carPosition; i++) {
+                if (cState.getPosition() == lengthOfStreet)
                 {
-                    cState.setParkingStatus(CarStatus.NOPARKING);
-                    return ;
-                }
-                else if (parkingFond) 
-                {
-                    System.out.println("parking maneuver..");
-                    cState.setParkingStatus(CarStatus.PARKED);
-                    return ;
-                }       
+                    stretch = parking.findSpace(cState.getDetectedSpace());
+                    if(stretch.getLength() < 5){
+                        cState.setParkingStatus(CarStatus.NOPARKING);
+                        System.out.println("No parking available!!");
+                        return;
+                    }
+                }   
                 else
                 {
-                    carPosition = cState.getPosition();
                     moveForward();
-                    counter = cState.isCurrentTaken(carPosition) ? 0 : counter + 1;
-                    parkingFond = counter == 5;
                 }
-                 
+            }
+            for (int i = 0; i < lengthOfStreet - stretch.getStartPosition(); i++) {
+                moveBackward();
+            }
+            cState.setParkingStatus(CarStatus.PARKED);
+            
+            ArrayList<ParkingSpace> tempArr = cState.getDetectedSpace();
+            for (int i = stretch.getStartPosition(); i < stretch.getStartPosition() + stretch.getLength(); i++) {
+                tempArr.set(i, new ParkingSpace(i, true));
             }
 
-            return ;
         }
     }
 
@@ -92,6 +73,10 @@ public class Car {
     public void unPark(){
         if (cState.getParkStatus() == CarStatus.PARKED){
             cState.setParkingStatus(CarStatus.UNPARKED);
+            ArrayList<ParkingSpace> p = cState.getDetectedSpace();
+            for (int i = cState.getPosition(); i <= cState.getPosition() + 5; i++) {
+                p.set(i, new ParkingSpace(i, false));
+            }
             System.out.println("Car is UnParked...");
         }
         else
@@ -143,7 +128,7 @@ public class Car {
                 return cState;
             }
             else {
-                cState.setPosition(actuator.getPosition());
+                setPosition(actuator.getPosition());
             }
         return cState;
 

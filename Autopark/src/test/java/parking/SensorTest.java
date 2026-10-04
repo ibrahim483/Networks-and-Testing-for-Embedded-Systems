@@ -1,17 +1,18 @@
 package parking;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 
-public class UnParkTest {
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-
-     Actuator actuator;
+public class SensorTest {
+    
+    Actuator actuator;
     Sensor sensorA;
     Sensor sensorB;
     ArrayList<ParkingSpace> pSpaces;
@@ -36,7 +37,6 @@ public class UnParkTest {
         reader = new StreetFileReader();
         streetList = reader.readStreet("C:\\Users\\khaawa22\\Documents\\GitHub\\Networks-and-Testing-for-Embedded-Systems\\Street.txt");
 
-        simulationPosition = c.getState().getPosition();
         when(actuator.getPosition()).thenAnswer(invocation -> simulationPosition);
         when(actuator.moveForward()).thenAnswer(invocation -> {
             if (simulationPosition >= 500) {
@@ -44,14 +44,6 @@ public class UnParkTest {
             }
         
             simulationPosition++;
-            return true;
-        });
-
-        when(actuator.moveBackward()).thenAnswer(invocation -> {
-            if (simulationPosition <= 0) {
-                return  false;
-            }
-            simulationPosition--;
             return true;
         });
         when(sensorA.getDistance()).thenAnswer(invocation -> {
@@ -62,28 +54,32 @@ public class UnParkTest {
             int p = streetList.get(simulationPosition);
             return new int [] {p,p,p,p,p};
         });
+
     }
 
-    
     @Test 
-    public void ifTheCarIsParkedThenUnPark(){
+    public void testFileReaderHasStreetData(){
+
         
-        c.park(new FirstSuitableRoutine());
-        c.unPark();
-
-        assertEquals(c.getState().getParkStatus(), CarStatus.UNPARKED);
-         for (int i = c.getState().getPosition(); i <= c.getState().getPosition() + 5; i++) {
-            assertEquals(c.getState().getDetectedSpace().get(i).isTaken(), false);
+        for (Integer s : streetList) {
+            System.out.println(s);
         }
-    }
+        assertNotNull(streetList);
 
+    }
 
     @Test 
-    public void ifTheCarIsNotParkedThenUnPark(){
-        State s = new State(100, CarStatus.UNPARKED, new ArrayList<>());
-        Car   c = new Car(null, null, s);
-        c.unPark();
+    public void testSensorReadingsFromIntegerArray(){
+       
+        ArrayList<Integer> sensorData = new ArrayList<>();
+        for (int i = 0; i < streetList.size(); i++) {
+            sensorData.add(sensorA.getDistance()[0]);
+            c.moveForward();
+        }
+        for (int i = 0; i < streetList.size(); i++) {
+            assertEquals(streetList.get(i), sensorData.get(i));
+        }
 
-        assertEquals(c.getState().getParkStatus(), CarStatus.UNPARKED);
     }
+
 }
