@@ -18,10 +18,19 @@ public class NoParkingIntegrationTest {
                 new ParkingStretch(350, 3)
         );
 
-        Actuator actuator = mock(
-                Actuator.class,
-                delegatesTo(new SimulatedActuator())
-        );
+        Actuator actuator = mock(Actuator.class);
+        int[] actuatorPosition = {0};
+
+        when(actuator.getPosition())
+                .thenAnswer(invocation -> actuatorPosition[0]);
+
+        when(actuator.moveForward()).thenAnswer(invocation -> {
+            if (actuatorPosition[0] >= Car.STREET_LENGTH) {
+                return false;
+            }
+            actuatorPosition[0]++;
+            return true;
+        });
 
         Sensor sensorA = mock(
                 Sensor.class,
