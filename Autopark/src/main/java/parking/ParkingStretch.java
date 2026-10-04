@@ -1,7 +1,5 @@
 package parking;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class ParkingStretch {
     private int startPosition;

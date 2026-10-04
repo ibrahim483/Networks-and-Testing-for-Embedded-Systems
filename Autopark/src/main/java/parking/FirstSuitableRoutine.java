@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class FirstSuitableRoutine extends ParkingRoutine{
 
+    
     @Override
     ParkingStretch findSpace(ArrayList<ParkingSpace> pSpace){
         int count = 0;

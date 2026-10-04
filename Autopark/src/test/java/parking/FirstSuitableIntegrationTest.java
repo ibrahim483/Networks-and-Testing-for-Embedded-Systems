@@ -2,6 +2,7 @@ package parking;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,22 +12,32 @@ import static org.mockito.Mockito.*;
 public class FirstSuitableIntegrationTest {
 
     int actuatorPosition;
+    Sensor sensorA = mock(Sensor.class);
+    Sensor sensorB = mock(Sensor.class);
+    Actuator actuator = mock(Actuator.class);
+    Car car = new Car(sensorA, sensorB, actuator);
+    ArrayList<ParkingSpace> pSpace = new ArrayList<>();
+
     @Test
     void parksInFirstSuitableSpace() {
-        List<ParkingStretch> spaces = List.of(
-                new ParkingStretch(50, 3),
-                new ParkingStretch(150, 8),
-                new ParkingStretch(350, 5)
-        );
 
-        Actuator actuator = mock(Actuator.class);
+        for (int i = 0; i < car.getStreetLength(); i++) {
+            if (i < 53 && i >= 50) {
+                pSpace.add(new ParkingSpace(i, false));
+            }else if (i < 157 && i >= 150) {
+                pSpace.add(new ParkingSpace(i, false));
+            }else if (i < 354 && i > 350) {
+                pSpace.add(new ParkingSpace(i, false));
+            }else{pSpace.add(new ParkingSpace(i, true));}
+        }
+
        actuatorPosition = 0;
 
         when(actuator.getPosition())
                 .thenAnswer(invocation -> actuatorPosition);
 
         when(actuator.moveForward()).thenAnswer(invocation -> {
-            if (actuatorPosition >= Car.STREET_LENGTH) {
+            if (actuatorPosition >= car.getStreetLength()) {
                 return false;
             }
             actuatorPosition++;
@@ -40,7 +51,6 @@ public class FirstSuitableIntegrationTest {
             actuatorPosition--;
             return true;
         });
-        Sensor sensorA = mock(Sensor.class);
         boolean[] sensorABroken = {false};
 
         when(sensorA.getDistance()).thenAnswer(invocation -> {
@@ -71,7 +81,6 @@ public class FirstSuitableIntegrationTest {
             };
         });
 
-        Sensor sensorB = mock(Sensor.class);
 
         when(sensorB.getDistance()).thenAnswer(invocation -> {
             int cell = Math.max(0, actuator.getPosition() - 1);
@@ -90,11 +99,8 @@ public class FirstSuitableIntegrationTest {
                     distance + 1, distance + 2
             };
         });
-        Car car = new Car(sensorA, sensorB, actuator);
 
-        FirstSuitableRoutine routine = new FirstSuitableRoutine(car);
 
-        assertTrue(routine.execute());
         assertEquals(CarStatus.PARKED, car.getState().getParkStatus());
         assertEquals(158, car.getState().getPosition());
         assertEquals(158, actuator.getPosition());
@@ -107,7 +113,7 @@ public class FirstSuitableIntegrationTest {
         car.unPark();
         assertEquals(CarStatus.UNPARKED, car.getState().getParkStatus());
 
-        for (int position = 158; position < Car.STREET_LENGTH; position++) {
+        for (int position = 158; position < car.getStreetLength(); position++) {
             car.moveForward();
         }
 

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Car {
     /** Used by ParkingRoutine. */
-    public static final int STREET_LENGTH = 500;
+    private  static final int STREET_LENGTH = 500;
 
     private State cState ;
     private  Sensor sensorA;
@@ -222,6 +222,9 @@ public class Car {
     public void setPosition(int position){
         this.cState.setPosition(position);
     }
+    public int getStreetLength(){
+        return STREET_LENGTH;
+    } 
 }
 
 

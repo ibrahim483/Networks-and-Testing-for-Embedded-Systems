@@ -93,17 +93,4 @@ public class State {
             && this.detectedSpaces.equals(s.detectedSpaces);
     }
 
-    public List<ParkingStretch> getParkingStretches() {
-        List<ParkingStretch> stretches = new ArrayList<>();
-        int length = 0;
-        for (int i = 0; i <= Car.STREET_LENGTH; i++) {
-            if (i < Car.STREET_LENGTH && !isCurrentTaken(i)) {
-                length++;
-            } else if (length > 0) {
-                stretches.add(new ParkingStretch(i - length, length));
-                length = 0;
-            }
-        }
-        return stretches;
-    }
 }
